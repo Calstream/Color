@@ -256,11 +256,31 @@ namespace Color1
 
 		private void histogramToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			a_blue = new byte[255];
-			a_red = new byte[255];
-			a_green = new byte[255];
-			int hist_x_step = pictureBox.Image.Width / 255;
-			
+			a_blue = new byte[256];
+			a_red = new byte[256];
+			a_green = new byte[256];
+			int hist_x_step = pictureBox.Image.Width / 256;
+			int max_b = a_blue.Max();
+			int max_g = a_green.Max();
+			int max_r = a_red.Max();
+
+			//float y_step = h / y_diff;
+
+			//float[] y_p = new float[n_points];
+			//for (int i = 0; i < n_points; i++)
+			//	y_p[i] = (y_max - (float)array_y[i]) * y_step;
+
+			int hist_y_step = pictureBox.Image.Width / 256;
+			for (int i = 0; i < 256; i++)
+			{
+				a_blue[i] = (byte)((max_b - a_blue[i]) * hist_y_step);
+				a_green[i] = (byte)((max_g - a_green[i]) * hist_y_step);
+				a_red[i] = (byte)((max_r - a_red[i]) * hist_y_step);
+
+				Graphics.draw
+			}
+
+
 		}
 	}
 }
