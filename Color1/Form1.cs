@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace Color1
 {
@@ -277,7 +278,13 @@ namespace Color1
 				a_green[i] = (byte)((max_g - a_green[i]) * hist_y_step);
 				a_red[i] = (byte)((max_r - a_red[i]) * hist_y_step);
 
-				Graphics.draw
+				Pen blackPen = new Pen(Color.Black, 3);
+
+				// Create rectangle.
+				Rectangle rect = new Rectangle(0, 0, 200, 200);
+
+				// Draw rectangle to screen.
+				pictureBox.Graphics.DrawRectangle(blackPen, rect);
 			}
 
 
