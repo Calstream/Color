@@ -16,6 +16,9 @@ namespace Color1
 
 		string filepath = "";
 		byte[] rgbValues;
+		byte[] a_red;
+		byte[] a_green;
+		byte[] a_blue;
 
 
 		public Form1()
@@ -111,6 +114,49 @@ namespace Color1
 			bmp.UnlockBits(bmpData);
 		}
 
+		private void channel(int c, Bitmap bmp)
+		{
+			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+			System.Drawing.Imaging.BitmapData bmpData =
+				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+				bmp.PixelFormat);
+
+			// Get the address of the first line.
+			IntPtr ptr = bmpData.Scan0;
+
+			// Declare an array to hold the bytes of the bitmap.
+			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+			rgbValues = new byte[bytes];
+
+			// Copy the RGB values into the array.
+			System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+			// b-0 g-1 r-2
+			for (int counter = 0; counter < rgbValues.Length; counter += 3)
+			{
+				if (c == 0)
+				{
+					rgbValues[counter] = 0;
+					rgbValues[counter + 1] = 0;
+				}
+				else if (c == 1)
+				{
+					rgbValues[counter] = 0;
+					rgbValues[counter + 2] = 0;
+				}
+				else if (c == 2)
+				{
+					rgbValues[counter + 1] = 0;
+					rgbValues[counter + 2] = 0;
+				}
+			}
+
+			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+			// Unlock the bits.
+			bmp.UnlockBits(bmpData);
+		}
+
 		private void GSequal_Click(object sender, EventArgs e)
 		{
 			Bitmap gs = pictureBox.Image as Bitmap;
@@ -149,6 +195,72 @@ namespace Color1
 		private void GShistogram_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void redToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Bitmap bm = pictureBox.Image as Bitmap;
+			channel(0, bm);
+			pictureBox.Image = bm;
+			pictureBox.Refresh();
+			
+		}
+
+		private void greenToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Bitmap bm = pictureBox.Image as Bitmap;
+			channel(1, bm);
+			pictureBox.Image = bm;
+			pictureBox.Refresh();
+		}
+
+		private void blueToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Bitmap bm = pictureBox.Image as Bitmap;
+			channel(2, bm);
+			pictureBox.Image = bm;
+			pictureBox.Refresh();
+		}
+
+		private void hist(Bitmap bmp)
+		{
+			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+			System.Drawing.Imaging.BitmapData bmpData =
+				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+				bmp.PixelFormat);
+
+			// Get the address of the first line.
+			IntPtr ptr = bmpData.Scan0;
+
+			// Declare an array to hold the bytes of the bitmap.
+			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+			rgbValues = new byte[bytes];
+
+			// Copy the RGB values into the array.
+			System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+			// b-0 g-1 r-2
+			for (int counter = 0; counter < rgbValues.Length; counter += 3)
+			{
+				a_blue[rgbValues[counter]]++;
+				a_green[rgbValues[counter+1]]++;
+				a_red[rgbValues[counter+2]]++;
+			}
+
+			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+			// Unlock the bits.
+			bmp.UnlockBits(bmpData);
+		}
+
+
+		private void histogramToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			a_blue = new byte[255];
+			a_red = new byte[255];
+			a_green = new byte[255];
+			int hist_x_step = pictureBox.Image.Width / 255;
+			
 		}
 	}
 }
