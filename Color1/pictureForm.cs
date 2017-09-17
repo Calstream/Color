@@ -12,9 +12,15 @@ namespace Color1
 {
     public partial class pictureForm : Form
     {
-        public pictureForm()
+        public pictureForm(Bitmap image)
         {
             InitializeComponent();
+            pb1.Image = image;
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

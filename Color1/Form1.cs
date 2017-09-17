@@ -18,9 +18,12 @@ namespace Color1
 
 		string filepath = "";
 		byte[] rgbValues;
+        byte[] original;
 		byte[] a_red;
 		byte[] a_green;
 		byte[] a_blue;
+        int w;
+        int h;
 
 
 		public Form1()
@@ -49,6 +52,30 @@ namespace Color1
                     item.Enabled = true;
                 foreach (ToolStripItem item in hSVToolStripMenuItem.DropDownItems)
                     item.Enabled = true;
+
+                Bitmap bmp = pictureBox.Image as Bitmap;
+                w = bmp.Width;
+                h = bmp.Height;
+                Rectangle rect = new Rectangle(0, 0, w, h);
+                System.Drawing.Imaging.BitmapData bmpData =
+                    bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                    bmp.PixelFormat);
+
+                // Get the address of the first line.
+                IntPtr ptr = bmpData.Scan0;
+
+                // Declare an array to hold the bytes of the bitmap.
+                int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+                original = new byte[bytes];
+
+                // Copy the RGB values into the array.
+                System.Runtime.InteropServices.Marshal.Copy(ptr, original, 0, bytes);
+
+                System.Runtime.InteropServices.Marshal.Copy(original, 0, ptr, bytes);
+
+                // Unlock the bits.
+                bmp.UnlockBits(bmpData);
+
             }
 		}
 
@@ -66,10 +93,12 @@ namespace Color1
 
 			// Declare an array to hold the bytes of the bitmap.
 			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-			rgbValues = new byte[bytes];
+            //rgbValues = new byte[bytes];
+            rgbValues = new byte[bytes];
+            original.CopyTo(rgbValues,0);
 
 			// Copy the RGB values into the array.
-			System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+			//System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
 
 			for (int counter = 0; counter < rgbValues.Length; counter += 3)
@@ -102,10 +131,11 @@ namespace Color1
 
 			// Declare an array to hold the bytes of the bitmap.
 			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-			rgbValues = new byte[bytes];
+            rgbValues = new byte[bytes];
+            original.CopyTo(rgbValues, 0);
 
-			// Copy the RGB values into the array.
-			System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+            // Copy the RGB values into the array.
+            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
 
 			for (int counter = 0; counter < rgbValues.Length; counter += 3)
@@ -137,10 +167,11 @@ namespace Color1
 
 			// Declare an array to hold the bytes of the bitmap.
 			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-			rgbValues = new byte[bytes];
+            rgbValues = new byte[bytes];
+            original.CopyTo(rgbValues, 0);
 
-			// Copy the RGB values into the array.
-			System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+            // Copy the RGB values into the array.
+            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
 			// b-0 g-1 r-2
 			for (int counter = 0; counter < rgbValues.Length; counter += 3)
@@ -172,14 +203,8 @@ namespace Color1
 		{
 			Bitmap gs = pictureBox.Image as Bitmap;
 			simple_gs(gs);
-
-            var newForm = new pictureForm();
+            var newForm = new pictureForm(gs);
             newForm.Text = "Greyscale(simple)";
-            PictureBox p = new PictureBox();
-            newForm.Controls.Add(p);
-            p.Height = gs.Height;
-            p.Width = gs.Width;
-            p.Image = gs;
             newForm.Show();
 		}
 
@@ -187,14 +212,10 @@ namespace Color1
 		{
 			Bitmap hdtv = pictureBox.Image as Bitmap;
 			hdtv_gs(hdtv);
-            var newForm = new pictureForm();
+            var newForm = new pictureForm(hdtv);
             newForm.Text = "Greyscale(HDTV)";
-            PictureBox p = new PictureBox();
-            newForm.Controls.Add(p);
-            p.Height = hdtv.Height;
-            p.Width = hdtv.Width;
-            p.Image = hdtv;
             newForm.Show();
+            
 		}
 
 		private void GSdifference_Click(object sender, EventArgs e)
@@ -261,13 +282,8 @@ namespace Color1
 		{
 			Bitmap bm = pictureBox.Image as Bitmap;
 			channel(0, bm);
-            var newForm = new pictureForm();
-            newForm.Text = "Greyscale(HDTV)";
-            PictureBox p = new PictureBox();
-            newForm.Controls.Add(p);
-            p.Height = bm.Height;
-            p.Width = bm.Width;
-            p.Image = bm;
+            var newForm = new pictureForm(bm);
+            newForm.Text = "Red";
             newForm.Show();
 
         }
@@ -276,13 +292,8 @@ namespace Color1
 		{
 			Bitmap bm = pictureBox.Image as Bitmap;
 			channel(1, bm);
-            var newForm = new pictureForm();
-            newForm.Text = "Greyscale(HDTV)";
-            PictureBox p = new PictureBox();
-            newForm.Controls.Add(p);
-            p.Height = bm.Height;
-            p.Width = bm.Width;
-            p.Image = bm;
+            var newForm = new pictureForm(bm);
+            newForm.Text = "Green";
             newForm.Show();
         }
 
@@ -290,13 +301,8 @@ namespace Color1
 		{
 			Bitmap bm = pictureBox.Image as Bitmap;
 			channel(2, bm);
-            var newForm = new pictureForm();
-            newForm.Text = "Greyscale(HDTV)";
-            PictureBox p = new PictureBox();
-            newForm.Controls.Add(p);
-            p.Height = bm.Height;
-            p.Width = bm.Width;
-            p.Image = bm;
+            var newForm = new pictureForm(bm);
+            newForm.Text = "Blue";
             newForm.Show();
         }
 
