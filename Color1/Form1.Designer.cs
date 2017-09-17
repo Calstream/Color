@@ -92,35 +92,40 @@
             this.GShdtv,
             this.GSdifference,
             this.GShistogram});
+            this.grayscaleToolStripMenuItem.Enabled = false;
             this.grayscaleToolStripMenuItem.Name = "grayscaleToolStripMenuItem";
             this.grayscaleToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
             this.grayscaleToolStripMenuItem.Text = "Grayscale";
             // 
             // GSequal
             // 
+            this.GSequal.Enabled = false;
             this.GSequal.Name = "GSequal";
-            this.GSequal.Size = new System.Drawing.Size(130, 22);
+            this.GSequal.Size = new System.Drawing.Size(152, 22);
             this.GSequal.Text = "Equal";
             this.GSequal.Click += new System.EventHandler(this.GSequal_Click);
             // 
             // GShdtv
             // 
+            this.GShdtv.Enabled = false;
             this.GShdtv.Name = "GShdtv";
-            this.GShdtv.Size = new System.Drawing.Size(130, 22);
+            this.GShdtv.Size = new System.Drawing.Size(152, 22);
             this.GShdtv.Text = "HDTV";
             this.GShdtv.Click += new System.EventHandler(this.GShdtv_Click);
             // 
             // GSdifference
             // 
+            this.GSdifference.Enabled = false;
             this.GSdifference.Name = "GSdifference";
-            this.GSdifference.Size = new System.Drawing.Size(130, 22);
+            this.GSdifference.Size = new System.Drawing.Size(152, 22);
             this.GSdifference.Text = "Difference";
             this.GSdifference.Click += new System.EventHandler(this.GSdifference_Click);
             // 
             // GShistogram
             // 
+            this.GShistogram.Enabled = false;
             this.GShistogram.Name = "GShistogram";
-            this.GShistogram.Size = new System.Drawing.Size(130, 22);
+            this.GShistogram.Size = new System.Drawing.Size(152, 22);
             this.GShistogram.Text = "Histogram";
             this.GShistogram.Click += new System.EventHandler(this.GShistogram_Click);
             // 
@@ -131,35 +136,40 @@
             this.greenToolStripMenuItem,
             this.blueToolStripMenuItem,
             this.histogramToolStripMenuItem1});
+            this.rGBToolStripMenuItem.Enabled = false;
             this.rGBToolStripMenuItem.Name = "rGBToolStripMenuItem";
             this.rGBToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.rGBToolStripMenuItem.Text = "RGB";
             // 
             // redToolStripMenuItem
             // 
+            this.redToolStripMenuItem.Enabled = false;
             this.redToolStripMenuItem.Name = "redToolStripMenuItem";
-            this.redToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.redToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.redToolStripMenuItem.Text = "Red";
             this.redToolStripMenuItem.Click += new System.EventHandler(this.redToolStripMenuItem_Click);
             // 
             // greenToolStripMenuItem
             // 
+            this.greenToolStripMenuItem.Enabled = false;
             this.greenToolStripMenuItem.Name = "greenToolStripMenuItem";
-            this.greenToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.greenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.greenToolStripMenuItem.Text = "Green";
             this.greenToolStripMenuItem.Click += new System.EventHandler(this.greenToolStripMenuItem_Click);
             // 
             // blueToolStripMenuItem
             // 
+            this.blueToolStripMenuItem.Enabled = false;
             this.blueToolStripMenuItem.Name = "blueToolStripMenuItem";
-            this.blueToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.blueToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.blueToolStripMenuItem.Text = "Blue";
             this.blueToolStripMenuItem.Click += new System.EventHandler(this.blueToolStripMenuItem_Click);
             // 
             // histogramToolStripMenuItem1
             // 
+            this.histogramToolStripMenuItem1.Enabled = false;
             this.histogramToolStripMenuItem1.Name = "histogramToolStripMenuItem1";
-            this.histogramToolStripMenuItem1.Size = new System.Drawing.Size(130, 22);
+            this.histogramToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.histogramToolStripMenuItem1.Text = "Histogram";
             this.histogramToolStripMenuItem1.Click += new System.EventHandler(this.histogramToolStripMenuItem1_Click);
             // 
@@ -168,20 +178,23 @@
             this.hSVToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.convertToolStripMenuItem,
             this.editToolStripMenuItem});
+            this.hSVToolStripMenuItem.Enabled = false;
             this.hSVToolStripMenuItem.Name = "hSVToolStripMenuItem";
             this.hSVToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.hSVToolStripMenuItem.Text = "HSV";
             // 
             // convertToolStripMenuItem
             // 
+            this.convertToolStripMenuItem.Enabled = false;
             this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
-            this.convertToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.convertToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.convertToolStripMenuItem.Text = "Convert";
             // 
             // editToolStripMenuItem
             // 
+            this.editToolStripMenuItem.Enabled = false;
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.editToolStripMenuItem.Text = "Edit...";
             // 
             // pictureBox

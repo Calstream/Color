@@ -40,7 +40,16 @@ namespace Color1
 				if (pictureBox.Image != null)
 					pictureBox.Image.Dispose();
 				pictureBox.Image = new Bitmap(ofd.FileName);
-			}
+                grayscaleToolStripMenuItem.Enabled = true;
+                rGBToolStripMenuItem.Enabled = true;
+                hSVToolStripMenuItem.Enabled = true;
+                foreach (ToolStripItem item in grayscaleToolStripMenuItem.DropDownItems)
+                    item.Enabled = true;
+                foreach (ToolStripItem item in rGBToolStripMenuItem.DropDownItems)
+                    item.Enabled = true;
+                foreach (ToolStripItem item in hSVToolStripMenuItem.DropDownItems)
+                    item.Enabled = true;
+            }
 		}
 
 
@@ -256,9 +265,9 @@ namespace Color1
             newForm.Text = "Greyscale(HDTV)";
             PictureBox p = new PictureBox();
             newForm.Controls.Add(p);
-            p.Height = hdtv.Height;
-            p.Width = hdtv.Width;
-            p.Image = hdtv;
+            p.Height = bm.Height;
+            p.Width = bm.Width;
+            p.Image = bm;
             newForm.Show();
 
         }
@@ -271,9 +280,9 @@ namespace Color1
             newForm.Text = "Greyscale(HDTV)";
             PictureBox p = new PictureBox();
             newForm.Controls.Add(p);
-            p.Height = hdtv.Height;
-            p.Width = hdtv.Width;
-            p.Image = hdtv;
+            p.Height = bm.Height;
+            p.Width = bm.Width;
+            p.Image = bm;
             newForm.Show();
         }
 
@@ -285,9 +294,9 @@ namespace Color1
             newForm.Text = "Greyscale(HDTV)";
             PictureBox p = new PictureBox();
             newForm.Controls.Add(p);
-            p.Height = hdtv.Height;
-            p.Width = hdtv.Width;
-            p.Image = hdtv;
+            p.Height = bm.Height;
+            p.Width = bm.Width;
+            p.Image = bm;
             newForm.Show();
         }
 
