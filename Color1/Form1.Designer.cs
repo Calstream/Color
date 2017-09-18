@@ -93,7 +93,7 @@
             // 
             this.GSequal.Enabled = false;
             this.GSequal.Name = "GSequal";
-            this.GSequal.Size = new System.Drawing.Size(152, 22);
+            this.GSequal.Size = new System.Drawing.Size(130, 22);
             this.GSequal.Text = "Equal";
             this.GSequal.Click += new System.EventHandler(this.GSequal_Click);
             // 
@@ -101,7 +101,7 @@
             // 
             this.GShdtv.Enabled = false;
             this.GShdtv.Name = "GShdtv";
-            this.GShdtv.Size = new System.Drawing.Size(152, 22);
+            this.GShdtv.Size = new System.Drawing.Size(130, 22);
             this.GShdtv.Text = "HDTV";
             this.GShdtv.Click += new System.EventHandler(this.GShdtv_Click);
             // 
@@ -109,7 +109,7 @@
             // 
             this.GSdifference.Enabled = false;
             this.GSdifference.Name = "GSdifference";
-            this.GSdifference.Size = new System.Drawing.Size(152, 22);
+            this.GSdifference.Size = new System.Drawing.Size(130, 22);
             this.GSdifference.Text = "Difference";
             this.GSdifference.Click += new System.EventHandler(this.GSdifference_Click);
             // 
@@ -117,7 +117,7 @@
             // 
             this.GShistogram.Enabled = false;
             this.GShistogram.Name = "GShistogram";
-            this.GShistogram.Size = new System.Drawing.Size(152, 22);
+            this.GShistogram.Size = new System.Drawing.Size(130, 22);
             this.GShistogram.Text = "Histogram";
             this.GShistogram.Click += new System.EventHandler(this.GShistogram_Click);
             // 
@@ -181,6 +181,7 @@
             this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
             this.convertToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.convertToolStripMenuItem.Text = "Convert";
+            this.convertToolStripMenuItem.Click += new System.EventHandler(this.convertToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
