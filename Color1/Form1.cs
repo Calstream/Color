@@ -22,6 +22,7 @@ namespace Color1
 		byte[] a_red;
 		byte[] a_green;
 		byte[] a_blue;
+        byte[] saturation;
         int w;
         int h;
 
@@ -199,6 +200,45 @@ namespace Color1
 			bmp.UnlockBits(bmpData);
 		}
 
+        private void difference_gs(Bitmap bmp)
+        {
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                bmp.PixelFormat);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+            //rgbValues = new byte[bytes];
+            rgbValues = new byte[bytes];
+            original.CopyTo(rgbValues, 0);
+
+            // Copy the RGB values into the array.
+            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+
+            for (int counter = 0; counter < rgbValues.Length; counter += 3)
+            {
+                byte b = rgbValues[counter];
+                byte g = rgbValues[counter + 1];
+                byte r = rgbValues[counter + 2];
+                byte gs_simple = (byte)(0.3333 * b + 0.3333 * g + 0.3333 * r);
+                byte gs_hdtv = (byte)(0.0722 * b + 0.7152 * g + 0.2126 * r);
+                byte diff = (byte)(gs_hdtv - gs_simple + 0.3819 * 255);
+                rgbValues[counter] = diff;
+                rgbValues[counter + 1] = diff;
+                rgbValues[counter + 2] = diff;
+            }
+
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+        }
+
 		private void GSequal_Click(object sender, EventArgs e)
 		{
 			Bitmap gs = pictureBox.Image as Bitmap;
@@ -220,62 +260,88 @@ namespace Color1
 
 		private void GSdifference_Click(object sender, EventArgs e)
 		{
-			Bitmap hdtv = pictureBox.Image as Bitmap;
-			hdtv_gs(hdtv);
-			pictureBox.Image = hdtv;
-			pictureBox.Refresh();
-
-			Bitmap gs = pictureBox.Image as Bitmap;
-			hdtv_gs(gs);
-			pictureBox.Image = gs;
-			pictureBox.Refresh();
-
-
-			
-
-			Bitmap res = pictureBox.Image as Bitmap;
-
+			Bitmap diff = pictureBox.Image as Bitmap;
+            difference_gs(diff);
+            var newForm = new pictureForm(diff);
+            newForm.Text = "Greyscale(Difference)";
+            newForm.Show();
 		}
 
 		private void GShistogram_Click(object sender, EventArgs e)
 		{
-            a_blue = new byte[256];
-            a_red = new byte[256];
-            a_green = new byte[256];
-            int hist_x_step = pictureBox.Image.Width / 256;
-            int max_b = a_blue.Max();
-            int max_g = a_green.Max();
-            int max_r = a_red.Max();
+            Bitmap bmp = pictureBox.Image as Bitmap;
+            hdtv_gs(bmp);
 
-            //float y_step = h / y_diff;
+            saturation = new byte[256];
 
-            //float[] y_p = new float[n_points];
-            //for (int i = 0; i < n_points; i++)
-            //	y_p[i] = (y_max - (float)array_y[i]) * y_step;
-
-            int hist_y_step = pictureBox.Image.Width / 256;
-            for (int i = 0; i < 256; i++)
-            {
-                a_blue[i] = (byte)((max_b - a_blue[i]) * hist_y_step);
-                a_green[i] = (byte)((max_g - a_green[i]) * hist_y_step);
-                a_red[i] = (byte)((max_r - a_red[i]) * hist_y_step);
-
-                Pen blackPen = new Pen(Color.Black, 3);
-                //Brush blackBrush = new Brush(Color.White);
-                // Create rectangle.
-                Rectangle rect = new Rectangle(0, 0, 200, 200);
-
-                // Draw rectangle to screen.
-                Bitmap bm = pictureBox.Image as Bitmap;
-                //Graphics img = new Graphics.FromImage(bm);
-                using (var graphics = Graphics.FromImage(bm))
+            for (int i = 0; i < bmp.Width; ++i)
+                for (int j = 0; j < bmp.Height; ++j)
                 {
-                    graphics.DrawRectangle(blackPen, rect);
-                    graphics.DrawRectangle(blackPen, rect);
+                    Color color = bmp.GetPixel(i, j);
+                    ++saturation[color.R];
                 }
 
-                pictureBox.Image = bm;
+            int width = 256, height = 300;
+
+            Bitmap histogram = new Bitmap(width, height);
+
+            int max_saturation = saturation.Max();
+
+            double point = (double)max_saturation / height;
+
+            for (int i = 0; i < width; ++i)
+            {
+                for (int j = height - 1; j > height - saturation[i] / point; --j)
+                {
+                    histogram.SetPixel(i, j, Color.Black);
+                }
             }
+
+            var newForm = new pictureForm(histogram);
+            newForm.Text = "Histogram(GS)";
+            newForm.Show();
+
+
+            //a_blue = new byte[256];
+            //a_red = new byte[256];
+            //a_green = new byte[256];
+
+            //int hist_x_step = pictureBox.Image.Width / 256;
+
+
+            //int max_b = a_blue.Max();
+            //int max_g = a_green.Max();
+            //int max_r = a_red.Max();
+
+            ////float y_step = h / y_diff;
+
+            ////float[] y_p = new float[n_points];
+            ////for (int i = 0; i < n_points; i++)
+            ////	y_p[i] = (y_max - (float)array_y[i]) * y_step;
+
+            //int hist_y_step = pictureBox.Image.Width / 256;
+            //for (int i = 0; i < 256; i++)
+            //{
+            //    a_blue[i] = (byte)((max_b - a_blue[i]) * hist_y_step);
+            //    a_green[i] = (byte)((max_g - a_green[i]) * hist_y_step);
+            //    a_red[i] = (byte)((max_r - a_red[i]) * hist_y_step);
+
+            //    Pen blackPen = new Pen(Color.Black, 3);
+            //    //Brush blackBrush = new Brush(Color.White);
+            //    // Create rectangle.
+            //    Rectangle rect = new Rectangle(0, 0, 200, 200);
+
+            //    // Draw rectangle to screen.
+            //    Bitmap bm = pictureBox.Image as Bitmap;
+            //    //Graphics img = new Graphics.FromImage(bm);
+            //    using (var graphics = Graphics.FromImage(bm))
+            //    {
+            //        graphics.DrawRectangle(blackPen, rect);
+            //        graphics.DrawRectangle(blackPen, rect);
+            //    }
+
+            //    pictureBox.Image = bm;
+            //}
         }
 
 		private void redToolStripMenuItem_Click(object sender, EventArgs e)
@@ -340,9 +406,65 @@ namespace Color1
 
 		private void histogramToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			
+            Bitmap bmp = pictureBox.Image as Bitmap;
 
+            a_blue = new byte[256];
+            a_red = new byte[256];
+            a_green = new byte[256];
 
-		}
-	}
+            for (int i = 0; i < bmp.Width; ++i)
+                for (int j = 0; j < bmp.Height; ++j)
+                {
+                    Color color = bmp.GetPixel(i, j);
+                    ++a_red[color.R];
+                    ++a_green[color.G];
+                    ++a_blue[color.B];
+                }
+
+            int width = 768, height = 300;
+
+            Bitmap histogram = new Bitmap(width, height);
+
+            int max_b = a_blue.Max();
+            int max_g = a_green.Max();
+            int max_r = a_red.Max();
+            int max = Math.Max(Math.Max(max_b, max_g), max_r);
+
+            double point = (double)max / height;
+
+            for (int i = 0; i < width / 3; ++i)
+            {
+                for (int j = height - 1; j > height - a_red[i] / point; --j)
+                {
+                    histogram.SetPixel(i, j, Color.Red);
+                }
+            }
+
+            for (int i = width / 3; i < width * 2 / 3; ++i)
+            {
+                for (int j = height - 1; j > height - a_green[i - 256] / point; --j)
+                {
+                    histogram.SetPixel(i, j, Color.Green);
+                }
+            }
+
+            for (int i = width * 2 / 3; i < width; ++i)
+            {
+                for (int j = height - 1; j > height - a_blue[i - 512] / point; --j)
+                {
+                    histogram.SetPixel(i, j, Color.Blue);
+                }
+            }
+
+            var newForm = new pictureForm(histogram);
+            newForm.Text = "Histogram(RGB)";
+            newForm.Show();
+
+        }
+
+        private void convertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
