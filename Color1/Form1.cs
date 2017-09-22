@@ -23,6 +23,7 @@ namespace Color1
 		byte[] a_green;
 		byte[] a_blue;
         byte[] saturation;
+		int bytes;
         int w;
         int h;
 
@@ -300,48 +301,6 @@ namespace Color1
             var newForm = new pictureForm(histogram);
             newForm.Text = "Histogram(GS)";
             newForm.Show();
-
-
-            //a_blue = new byte[256];
-            //a_red = new byte[256];
-            //a_green = new byte[256];
-
-            //int hist_x_step = pictureBox.Image.Width / 256;
-
-
-            //int max_b = a_blue.Max();
-            //int max_g = a_green.Max();
-            //int max_r = a_red.Max();
-
-            ////float y_step = h / y_diff;
-
-            ////float[] y_p = new float[n_points];
-            ////for (int i = 0; i < n_points; i++)
-            ////	y_p[i] = (y_max - (float)array_y[i]) * y_step;
-
-            //int hist_y_step = pictureBox.Image.Width / 256;
-            //for (int i = 0; i < 256; i++)
-            //{
-            //    a_blue[i] = (byte)((max_b - a_blue[i]) * hist_y_step);
-            //    a_green[i] = (byte)((max_g - a_green[i]) * hist_y_step);
-            //    a_red[i] = (byte)((max_r - a_red[i]) * hist_y_step);
-
-            //    Pen blackPen = new Pen(Color.Black, 3);
-            //    //Brush blackBrush = new Brush(Color.White);
-            //    // Create rectangle.
-            //    Rectangle rect = new Rectangle(0, 0, 200, 200);
-
-            //    // Draw rectangle to screen.
-            //    Bitmap bm = pictureBox.Image as Bitmap;
-            //    //Graphics img = new Graphics.FromImage(bm);
-            //    using (var graphics = Graphics.FromImage(bm))
-            //    {
-            //        graphics.DrawRectangle(blackPen, rect);
-            //        graphics.DrawRectangle(blackPen, rect);
-            //    }
-
-            //    pictureBox.Image = bm;
-            //}
         }
 
 		private void redToolStripMenuItem_Click(object sender, EventArgs e)
@@ -406,13 +365,73 @@ namespace Color1
 
 		private void histogramToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-            Bitmap bmp = pictureBox.Image as Bitmap;
 
-            a_blue = new byte[256];
+
+			Bitmap bmp = pictureBox.Image as Bitmap;
+
+			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+			System.Drawing.Imaging.BitmapData bmpData =
+				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+				bmp.PixelFormat);
+
+			// Get the address of the first line.
+			IntPtr ptr = bmpData.Scan0;
+
+			// Declare an array to hold the bytes of the bitmap.
+			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+			rgbValues = new byte[bytes];
+			original.CopyTo(rgbValues, 0);
+
+			// Copy the RGB values into the array.
+			//System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+			a_blue = new byte[256];
+			a_red = new byte[256];
+			a_green = new byte[256];
+
+			for (int counter = 0; counter < rgbValues.Length; counter += 3)
+			{
+				byte b = rgbValues[counter];
+				byte g = rgbValues[counter + 1];
+				byte r = rgbValues[counter + 2];
+				byte gs = (byte)(0.0722 * b + 0.7152 * g + 0.2126 * r);
+				rgbValues[counter] = gs;
+				rgbValues[counter + 1] = gs;
+				rgbValues[counter + 2] = gs;
+
+				++a_red[color.R];
+				++a_green[color.G];
+				++a_blue[color.B];
+
+			}
+
+			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+			// Unlock the bits.
+			bmp.UnlockBits(bmpData);
+
+
+
+
+
+
+			Bitmap bmp = pictureBox.Image as Bitmap;
+
+			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+			System.Drawing.Imaging.BitmapData bmpData =
+				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+				bmp.PixelFormat);
+			// Get the address of the first line.
+			IntPtr ptr = bmpData.Scan0;
+			System.Runtime.InteropServices.Marshal.Copy(original, 0, ptr, bytes);
+
+
+			a_blue = new byte[256];
             a_red = new byte[256];
             a_green = new byte[256];
+			bmp.UnlockBits(bmpData);
 
-            for (int i = 0; i < bmp.Width; ++i)
+			for (int i = 0; i < bmp.Width; ++i)
                 for (int j = 0; j < bmp.Height; ++j)
                 {
                     Color color = bmp.GetPixel(i, j);
