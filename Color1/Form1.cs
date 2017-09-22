@@ -272,36 +272,53 @@ namespace Color1
 		{
             Bitmap bmp = pictureBox.Image as Bitmap;
             hdtv_gs(bmp);
+			//GShist(bmp);
 
-            saturation = new byte[256];
-
-            for (int i = 0; i < bmp.Width; ++i)
-                for (int j = 0; j < bmp.Height; ++j)
-                {
-                    Color color = bmp.GetPixel(i, j);
-                    ++saturation[color.R];
-                }
-
-            int width = 256, height = 300;
-
-            Bitmap histogram = new Bitmap(width, height);
-
-            int max_saturation = saturation.Max();
-
-            double point = (double)max_saturation / height;
-
-            for (int i = 0; i < width; ++i)
-            {
-                for (int j = height - 1; j > height - saturation[i] / point; --j)
-                {
-                    histogram.SetPixel(i, j, Color.Black);
-                }
-            }
-
-            var newForm = new pictureForm(histogram);
-            newForm.Text = "Histogram(GS)";
+            var newForm = new pictureForm(GShist(bmp));
+            newForm.Text = "Histogram(HDTV)";
             newForm.Show();
         }
+
+		private void SHistogram_Click(object sender, EventArgs e)
+		{
+			Bitmap bmp = pictureBox.Image as Bitmap;
+			simple_gs(bmp);
+			//GShist(bmp);
+
+			var newForm = new pictureForm(GShist(bmp));
+			newForm.Text = "Histogram(simple)";
+			newForm.Show();
+		}
+
+		private Bitmap GShist(Bitmap bmp)
+		{
+			saturation = new byte[256];
+
+			for (int i = 0; i < bmp.Width; ++i)
+				for (int j = 0; j < bmp.Height; ++j)
+				{
+					Color color = bmp.GetPixel(i, j);
+					++saturation[color.R];
+				}
+
+			int width = 256, height = 300;
+
+			Bitmap histogram = new Bitmap(width, height);
+
+			int max_saturation = saturation.Max();
+
+			double point = (double)max_saturation / height;
+
+			for (int i = 0; i < width; ++i)
+			{
+				for (int j = height - 1; j > height - saturation[i] / point; --j)
+				{
+					histogram.SetPixel(i, j, Color.Black);
+				}
+			}
+
+			return histogram;
+		}
 
 		private void redToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -389,56 +406,18 @@ namespace Color1
 			a_red = new byte[256];
 			a_green = new byte[256];
 
+			// b-0 g-1 r-2
 			for (int counter = 0; counter < rgbValues.Length; counter += 3)
 			{
-				byte b = rgbValues[counter];
-				byte g = rgbValues[counter + 1];
-				byte r = rgbValues[counter + 2];
-				byte gs = (byte)(0.0722 * b + 0.7152 * g + 0.2126 * r);
-				rgbValues[counter] = gs;
-				rgbValues[counter + 1] = gs;
-				rgbValues[counter + 2] = gs;
-
-				++a_red[color.R];
-				++a_green[color.G];
-				++a_blue[color.B];
-
+				++a_red[rgbValues[counter + 2]];
+				++a_green[rgbValues[counter + 1]];
+				++a_blue[rgbValues[counter]];
 			}
 
 			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
 
 			// Unlock the bits.
 			bmp.UnlockBits(bmpData);
-
-
-
-
-
-
-			Bitmap bmp = pictureBox.Image as Bitmap;
-
-			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-			System.Drawing.Imaging.BitmapData bmpData =
-				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
-				bmp.PixelFormat);
-			// Get the address of the first line.
-			IntPtr ptr = bmpData.Scan0;
-			System.Runtime.InteropServices.Marshal.Copy(original, 0, ptr, bytes);
-
-
-			a_blue = new byte[256];
-            a_red = new byte[256];
-            a_green = new byte[256];
-			bmp.UnlockBits(bmpData);
-
-			for (int i = 0; i < bmp.Width; ++i)
-                for (int j = 0; j < bmp.Height; ++j)
-                {
-                    Color color = bmp.GetPixel(i, j);
-                    ++a_red[color.R];
-                    ++a_green[color.G];
-                    ++a_blue[color.B];
-                }
 
             int width = 768, height = 300;
 
@@ -485,5 +464,7 @@ namespace Color1
         {
 
         }
-    }
+
+		
+	}
 }
