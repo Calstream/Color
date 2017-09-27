@@ -48,29 +48,31 @@
 			this.hue_trackBar.Size = new System.Drawing.Size(174, 45);
 			this.hue_trackBar.SmallChange = 10;
 			this.hue_trackBar.TabIndex = 0;
-			this.hue_trackBar.Scroll += new System.EventHandler(this.hue_trackBar_Scroll);
+			this.hue_trackBar.Scroll += new System.EventHandler(this.trackbar_scroll);
 			// 
 			// saturation_trackBar
 			// 
-			this.saturation_trackBar.LargeChange = 10;
+			this.saturation_trackBar.LargeChange = 20;
 			this.saturation_trackBar.Location = new System.Drawing.Point(91, 69);
 			this.saturation_trackBar.Maximum = 100;
+			this.saturation_trackBar.Minimum = -100;
 			this.saturation_trackBar.Name = "saturation_trackBar";
 			this.saturation_trackBar.Size = new System.Drawing.Size(174, 45);
-			this.saturation_trackBar.SmallChange = 5;
+			this.saturation_trackBar.SmallChange = 10;
 			this.saturation_trackBar.TabIndex = 1;
-			this.saturation_trackBar.Scroll += new System.EventHandler(this.saturation_trackBar_Scroll);
+			this.saturation_trackBar.Scroll += new System.EventHandler(this.trackbar_scroll);
 			// 
 			// value_trackBar
 			// 
-			this.value_trackBar.LargeChange = 10;
+			this.value_trackBar.LargeChange = 90;
 			this.value_trackBar.Location = new System.Drawing.Point(91, 120);
 			this.value_trackBar.Maximum = 100;
+			this.value_trackBar.Minimum = -100;
 			this.value_trackBar.Name = "value_trackBar";
 			this.value_trackBar.Size = new System.Drawing.Size(174, 45);
-			this.value_trackBar.SmallChange = 5;
+			this.value_trackBar.SmallChange = 80;
 			this.value_trackBar.TabIndex = 2;
-			this.value_trackBar.Scroll += new System.EventHandler(this.value_trackBar_Scroll);
+			this.value_trackBar.Scroll += new System.EventHandler(this.trackbar_scroll);
 			// 
 			// hue_label
 			// 

@@ -465,6 +465,11 @@ namespace Color1
 
         }
 
-		
+		private void editToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Sliders s = new Sliders(original,pictureBox.Image as Bitmap);
+			s.p = this;
+			s.Show();
+		}
 	}
 }

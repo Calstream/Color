@@ -36,16 +36,15 @@
 			this.GShdtv = new System.Windows.Forms.ToolStripMenuItem();
 			this.GSdifference = new System.Windows.Forms.ToolStripMenuItem();
 			this.GShistogram = new System.Windows.Forms.ToolStripMenuItem();
+			this.SHistogram = new System.Windows.Forms.ToolStripMenuItem();
 			this.rGBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.redToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.greenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.histogramToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.hSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.convertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pictureBox = new System.Windows.Forms.PictureBox();
-			this.SHistogram = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			this.SuspendLayout();
@@ -123,6 +122,14 @@
 			this.GShistogram.Text = "Histogram (HDTV)";
 			this.GShistogram.Click += new System.EventHandler(this.GShistogram_Click);
 			// 
+			// SHistogram
+			// 
+			this.SHistogram.Enabled = false;
+			this.SHistogram.Name = "SHistogram";
+			this.SHistogram.Size = new System.Drawing.Size(176, 22);
+			this.SHistogram.Text = "Histogram (simple)";
+			this.SHistogram.Click += new System.EventHandler(this.SHistogram_Click);
+			// 
 			// rGBToolStripMenuItem
 			// 
 			this.rGBToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -170,27 +177,19 @@
 			// hSVToolStripMenuItem
 			// 
 			this.hSVToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.convertToolStripMenuItem,
             this.editToolStripMenuItem});
 			this.hSVToolStripMenuItem.Enabled = false;
 			this.hSVToolStripMenuItem.Name = "hSVToolStripMenuItem";
 			this.hSVToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
 			this.hSVToolStripMenuItem.Text = "HSV";
 			// 
-			// convertToolStripMenuItem
-			// 
-			this.convertToolStripMenuItem.Enabled = false;
-			this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
-			this.convertToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-			this.convertToolStripMenuItem.Text = "Convert";
-			this.convertToolStripMenuItem.Click += new System.EventHandler(this.convertToolStripMenuItem_Click);
-			// 
 			// editToolStripMenuItem
 			// 
 			this.editToolStripMenuItem.Enabled = false;
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.editToolStripMenuItem.Text = "Edit...";
+			this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
 			// 
 			// pictureBox
 			// 
@@ -200,14 +199,6 @@
 			this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.pictureBox.TabIndex = 2;
 			this.pictureBox.TabStop = false;
-			// 
-			// SHistogram
-			// 
-			this.SHistogram.Enabled = false;
-			this.SHistogram.Name = "SHistogram";
-			this.SHistogram.Size = new System.Drawing.Size(176, 22);
-			this.SHistogram.Text = "Histogram (simple)";
-			this.SHistogram.Click += new System.EventHandler(this.SHistogram_Click);
 			// 
 			// Form1
 			// 
@@ -244,7 +235,6 @@
 		private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem histogramToolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem hSVToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem convertToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SHistogram;
 	}
