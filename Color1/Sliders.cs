@@ -12,18 +12,31 @@ namespace Color1
 {
 	public partial class Sliders : Form
 	{
-		byte[] pixels;
-		byte[] or;
-		public Form1 p;
+		double[] hsv;
+        double[] hsv_diff;
+        byte[] or;
+        byte[] pixels;
+        public Form1 p;
 		Bitmap bmp;
+
+        int h_tb, s_tb, v_tb;
+
 		public Sliders(byte[] original, Bitmap b)
 		{
 			InitializeComponent();
 			//p = this.ParentForm as Form1;
-			pixels = original;
-			or = original;
+			hsv = new double[original.Length];
+            hsv_diff = new double[original.Length];
+            or = original;
+            pixels = original;
 			bmp = b;
-		}
+            originalToHSV();
+            h_tb = hue_trackBar.Value;
+            s_tb = saturation_trackBar.Value;
+            v_tb = value_trackBar.Value;
+        }
+
+
 
 		public static void ColorToHSV(Color color, out double hue, out double saturation, out double value)
 		{
@@ -60,107 +73,99 @@ namespace Color1
 				return Color.FromArgb(255, v, p, q);
 		}
 
+        private void originalToHSV()
+        {
+            for (int counter = 0; counter < or.Length; counter += 3)
+            {
+                byte b = or[counter];
+                byte g = or[counter + 1];
+                byte r = or[counter + 2];
 
-		private void trackbar_scroll(object sender, EventArgs e)
-		{
-			var sat_dif = saturation_trackBar.Value / 100.0 + 1.0;
-			var val_dif = value_trackBar.Value / 100.0 + 1.0;
-			var hue_dif = hue_trackBar.Value;
+                Color c = Color.FromArgb(r, g, b);
+                double h, s, v = 0.0;
+                ColorToHSV(c, out h, out s, out v);
 
-			for (int counter = 0; counter < pixels.Length; counter += 3)
-			{
-				byte b = pixels[counter];
-				byte g = pixels[counter + 1];
-				byte r = pixels[counter + 2];
+                hsv[counter] = h;
+                hsv[counter + 1] = s;
+                hsv[counter + 2] = v;
+            }
+        }
 
-				Color c = Color.FromArgb(r, g, b);
-				double h, s, v = 0.0;
-				ColorToHSV(c, out h, out s, out v);
+        private void changeHSV(int tb_num, double value)
+        {
+            double h, s, v;
+            h = s = v = 0.0;
+            for (int counter = 0; counter < hsv.Length; counter += 3)
+            {
+                if (tb_num == 1)
+                {
+                    hsv_diff[counter] += value;
+                }
+                else if (tb_num == 2)
+                {
+                    hsv_diff[counter + 1] += value;
+                }
+                else
+                {
+                    hsv_diff[counter + 2] += value;
+                }
 
-				h += hue_dif;
-				if (h > 360.0)
-					h -= 360;
+                h = hsv[counter] + hsv_diff[counter];
 
-				v *= val_dif;
-				if (v > 1.0)
-					v = 1.0;
+                if (hsv[counter + 1] + hsv_diff[counter + 1] < 1 && hsv[counter + 1] + hsv_diff[counter + 1] > 0)
+                    s = hsv[counter + 1] + hsv_diff[counter + 1];
 
-				s *= sat_dif;
-				if (s > 1.0)
-					s = 1.0;
-				Color nc = ColorFromHSV(h, s, v);
+                if (hsv[counter + 2] + hsv_diff[counter + 2] < 1 && hsv[counter + 2] + hsv_diff[counter + 2] > 0)
+                    v = hsv[counter + 2] + hsv_diff[counter + 2];
 
-				pixels[counter] = nc.B;
-				pixels[counter+1] = nc.G;
-				pixels[counter+2] = nc.R;
-			}
-			//Bitmap bmp = new Bitmap(w, h);
-			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-			System.Drawing.Imaging.BitmapData bmpData =
-				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
-				bmp.PixelFormat);
+                Color nc = ColorFromHSV(h, s, v);
 
-			// Get the address of the first line.
-			IntPtr ptr = bmpData.Scan0;
+                pixels[counter] = nc.B;
+                pixels[counter + 1] = nc.G;
+                pixels[counter + 2] = nc.R;
+            }
 
-			// Declare an array to hold the bytes of the bitmap.
-			int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
-			//rgbValues = new byte[bytes];
-			//rgbValues = new byte[bytes];
-			//original.CopyTo(rgbValues, 0);
+            //Bitmap bmp = new Bitmap(w, h);
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                bmp.PixelFormat);
 
-			// Copy the RGB values into the array.
-			//System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
 
+            // Declare an array to hold the bytes of the bitmap.
+            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
 
-			//for (int counter = 0; counter < rgbValues.Length; counter += 3)
-			//{
-			//	byte b = rgbValues[counter];
-			//	byte g = rgbValues[counter + 1];
-			//	byte r = rgbValues[counter + 2];
-			//	byte gs = (byte)(0.33 * b + 0.33 * g + 0.33 * r);
-			//	rgbValues[counter] = gs;
-			//	rgbValues[counter + 1] = gs;
-			//	rgbValues[counter + 2] = gs;
-			//}
+            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, ptr, bytes);
 
-			System.Runtime.InteropServices.Marshal.Copy(pixels, 0, ptr, bytes);
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+            PictureBox pb = ((p.Controls["pictureBox"]) as PictureBox);
+            pb.Refresh();
 
-			// Unlock the bits.
-			bmp.UnlockBits(bmpData);
-			PictureBox pb = ((p.Controls["pictureBox"]) as PictureBox);
-			pb.Refresh();
-
-			
+        }
 
 
+        private void hue_trackBar_Scroll(object sender, EventArgs e)
+        {
+            double val = hue_trackBar.Value - h_tb;
+            h_tb= hue_trackBar.Value;
+            changeHSV(1, val);
+        }
 
-		}
+        private void saturation_trackBar_Scroll(object sender, EventArgs e)
+        {
+           double val = (saturation_trackBar.Value - s_tb) / 50.0;
+            s_tb = saturation_trackBar.Value;
+            changeHSV(2, val);
+        }
 
-		private void saturation_trackBar_Scroll(object sender, EventArgs e)
-		{
-			var sat_dif = saturation_trackBar.Value;
-
-		}
-
-		private void value_trackBar_Scroll(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void hue_trackBar_Scroll(object sender, EventArgs e)
-		{
-			
-
-			for (int counter = 0; counter < pixels.Length; counter += 3)
-			{
-				byte b = pixels[counter];
-				byte g = pixels[counter + 1];
-				byte r = pixels[counter + 2];
-
-				Color c = Color.FromArgb(r, g, b);
-
-			}
-		}
-	}
+        private void value_trackBar_Scroll(object sender, EventArgs e)
+        {
+            double val = (value_trackBar.Value - v_tb) / 50.0;
+            v_tb = value_trackBar.Value;
+            changeHSV(3, val);
+        }
+    }
 }

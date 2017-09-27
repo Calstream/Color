@@ -460,11 +460,6 @@ namespace Color1
 
         }
 
-        private void convertToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
 		private void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Sliders s = new Sliders(original,pictureBox.Image as Bitmap);
