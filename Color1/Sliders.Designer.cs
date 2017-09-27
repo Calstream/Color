@@ -64,13 +64,13 @@
 			// 
 			// value_trackBar
 			// 
-			this.value_trackBar.LargeChange = 20;
+			this.value_trackBar.LargeChange = 90;
 			this.value_trackBar.Location = new System.Drawing.Point(91, 120);
 			this.value_trackBar.Maximum = 100;
 			this.value_trackBar.Minimum = -100;
 			this.value_trackBar.Name = "value_trackBar";
 			this.value_trackBar.Size = new System.Drawing.Size(174, 45);
-			this.value_trackBar.SmallChange = 10;
+			this.value_trackBar.SmallChange = 80;
 			this.value_trackBar.TabIndex = 2;
 			this.value_trackBar.Scroll += new System.EventHandler(this.trackbar_scroll);
 			// 

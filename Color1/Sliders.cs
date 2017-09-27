@@ -94,8 +94,8 @@ namespace Color1
 				pixels[counter+1] = nc.G;
 				pixels[counter+2] = nc.R;
 			}
-			Bitmap bmp = new Bitmap(w, h);
-			Rectangle rect = new Rectangle(0, 0, w, h);
+			//Bitmap bmp = new Bitmap(w, h);
+			Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
 			System.Drawing.Imaging.BitmapData bmpData =
 				bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
 				bmp.PixelFormat);
@@ -128,8 +128,13 @@ namespace Color1
 
 			// Unlock the bits.
 			bmp.UnlockBits(bmpData);
-			((p.Controls["pictureBox"]) as PictureBox).Image = bmp;
+			PictureBox pb = ((p.Controls["pictureBox"]) as PictureBox);
+			pb.Refresh();
+
 			
+
+
+
 		}
 
 		private void saturation_trackBar_Scroll(object sender, EventArgs e)
